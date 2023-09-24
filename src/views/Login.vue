@@ -1,55 +1,96 @@
 <template>
-    <div id="login">
-        <h1>Login</h1>
-        <div class="form-inputs">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" v-model="input.username" placeholder="Username" />
+    <div class="container">
+        <div class="col-sm-12">
+            <center><b>Welcome to IP Management solution</b></center>
         </div>
-        <div class="form-inputs">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
+        <div class="col-sm-12" style="margin-top: 10%;">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>
+                            <center>Login</center>
+                        </b>
+                    </div>
+                    <div class="panel-body">
+                        <form @submit.prevent="validateBeforeSubmit">
+                            <div v-show="login_failed_error" class="alert alert-danger" role="alert">
+                                {{ login_failed_message }}
+                            </div>
+                            <div class="form-group" :class="{ 'has-error': errors.has('email') }">
+                                <label for="email">Email address</label>
+                                <input type="email" v-validate="'required|email'" class="form-control email" id="email"
+                                    aria-describedby="emailHelp" placeholder="Enter email" name="email"
+                                    v-model="input.email">
+                                <small id="emailHelp" class="form-text text-danger" v-show="errors.has('email')">{{
+                                    errors.first('email') }}</small>
+                            </div>
+
+
+                            <div class="form-group" :class="{ 'has-error': errors.has('password') }">
+                                <label for="exampleInputPassword1">Password</label>
+                                <input type="password" v-validate="'required'" class="form-control" id="password"
+                                    name="password" v-model="input.password" placeholder="Password">
+                                <small id="emailHelp" class="form-text text-danger" v-show="errors.has('email')">{{
+                                    errors.first('password') }}</small>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
         </div>
-        <button type="button" v-on:click="login()">Login</button>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                input: {
-                    username: "",
-                    password: ""
-                }
-            }
+import AuthRepository from "../Repositories/AuthRepository";
+export default {
+    name: 'Login',
+    data() {
+        return {
+            input: {
+                email: "",
+                password: ""
+            },
+            login_failed_message: "",
+            login_failed_error: false
+        }
+    },
+    methods: {
+        resetProperty(){
+            this.login_failed_message = '';
+            this.login_failed_error = false;
         },
-        methods: {
-            login() {
-                if(this.input.username != "" && this.input.password != "") {
-                    // This should actually be an api call not a check against this.$parent.mockAccount
-                    if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
-                        this.$emit("authenticated", true);
-                        this.$router.replace({ name: "Secure" });
-                    } else {
-                        console.log("The username and / or password is incorrect");
-                    }
-                } else {
-                    console.log("A username and password must be present");
+        validateBeforeSubmit() {
+            this.$validator.validateAll().then((validate) => {
+                if (validate) {
+                    this.login_failed_message = '';
+                    AuthRepository.getToken(this.input).then(response => {
+                        this.resetProperty();
+                        let response_body = response.data;
+                        if(response.status == 200 & response_body.status && (response_body.data.access_token))
+                        {
+                            this.$router.push({ name: 'Dashboard' });
+                        }
+                        this.login_failed_message = 'Have some issue on login, please try again after some time';
+                        this.login_failed_error = true;
+                    }).catch(error => {
+                        let response_body = error.response.data;
+                        if(error.response.status == 401)
+                        {
+                            this.login_failed_message = 'Email or Password not matched';
+                            this.login_failed_error = true;
+                        }
+                    });
+                    return;
                 }
-            }
+
+                alert('Correct them errors!');
+            });
         }
     }
+}
 </script>
-
-<style>
-
-#login .form-inputs {
-    padding-bottom: 10px;
-}
-
-#login .form-inputs label {
-    padding-right: 10px;
-}
-
-</style>
