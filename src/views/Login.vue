@@ -67,27 +67,25 @@ export default {
         validateBeforeSubmit() {
             this.$validator.validateAll().then((validate) => {
                 if (validate) {
-                    this.login_failed_message = '';
+                    this.login_failed_message = 'Have some issue on login, please try again after some time';
+                    this.login_failed_error = false;
                     AuthRepository.getToken(this.input).then(response => {
                         this.resetProperty();
                         let response_body = response.data;
                         if(response.status == 200 & response_body.status && (response_body.data.access_token))
                         {
+                            this.$helpers.setCookie('token', response_body.data.access_token, 1);
                             this.$router.push({ name: 'Dashboard' });
                         }
-                        this.login_failed_message = 'Have some issue on login, please try again after some time';
-                        this.login_failed_error = true;
                     }).catch(error => {
-                        let response_body = error.response.data;
+                        this.login_failed_error = true;
                         if(error.response.status == 401)
                         {
                             this.login_failed_message = 'Email or Password not matched';
-                            this.login_failed_error = true;
                         }
                     });
                     return;
                 }
-
                 alert('Correct them errors!');
             });
         }
