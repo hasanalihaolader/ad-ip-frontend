@@ -1,8 +1,7 @@
+
 <template>
     <div class="container">
-        <div class="col-sm-12">
-            <center><b>Welcome to Dashboard</b></center>
-        </div>
+        <center><b>Welcome to Dashboard</b></center>
     </div>
 </template>
 
