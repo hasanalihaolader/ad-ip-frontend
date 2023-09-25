@@ -45,7 +45,6 @@ api_instance.interceptors.response.use(
           }
           return api_instance(original_request);
         } catch (refreshError) {
-          console.log(refreshError);
           throw refreshError;
         }
       }

@@ -13,7 +13,7 @@
                         </b>
                     </div>
                     <div class="panel-body">
-                        <form @submit.prevent="validateBeforeSubmit">
+                        <form @submit.prevent="login">
                             <div v-show="login_failed_error" class="alert alert-danger" role="alert">
                                 {{ login_failed_message }}
                             </div>
@@ -64,17 +64,19 @@ export default {
             this.login_failed_message = '';
             this.login_failed_error = false;
         },
-        validateBeforeSubmit() {
+        login() {
             this.$validator.validateAll().then((validate) => {
                 if (validate) {
                     this.login_failed_message = 'Have some issue on login, please try again after some time';
                     this.login_failed_error = false;
+                    const _this=this;
                     AuthRepository.getToken(this.input).then(response => {
                         this.resetProperty();
                         let response_body = response.data;
                         if(response.status == 200 & response_body.status && (response_body.data.access_token))
                         {
                             this.$helpers.setCookie('token', response_body.data.access_token, 1);
+                            this.$store.commit('setLoggedInUserInformation', response_body.data.user);
                             this.$router.push({ name: 'Dashboard' });
                         }
                     }).catch(error => {
@@ -84,9 +86,7 @@ export default {
                             this.login_failed_message = 'Email or Password not matched';
                         }
                     });
-                    return;
                 }
-                alert('Correct them errors!');
             });
         }
     }

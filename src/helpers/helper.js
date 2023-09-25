@@ -3,8 +3,6 @@ export default {
         const d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         let expires = "expires=" + d.toUTCString();
-        // console.log(expires);
-        // return ;
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     },
     getCookie(cname) {
@@ -23,5 +21,8 @@ export default {
     },
     isAuthenticated() {
         return this.getCookie('token');
+    },
+    deleteCookie(cookieName) {
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
 }
