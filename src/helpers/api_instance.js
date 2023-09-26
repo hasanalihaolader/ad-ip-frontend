@@ -29,7 +29,7 @@ api_instance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response && error.response.status === 401 && router.history.current.meta.require_auth) {
+    if (error.response && error.response.status == 401 && router.history.current.meta.require_auth) {
       error.config.retries = error.config.retries || 0 ;
       const maxRetries = 10;
       if ( error.config.retries < maxRetries) {
@@ -45,10 +45,14 @@ api_instance.interceptors.response.use(
           }
           return api_instance(original_request);
         } catch (refreshError) {
-          console.log(refreshError);
           throw refreshError;
         }
       }
+    }
+    else if(error.response && error.response.status == 403)
+    {
+      helpers.deleteCookie('token');
+      router.push({ name: 'Login'});
     }
     return Promise.reject(error);
   }

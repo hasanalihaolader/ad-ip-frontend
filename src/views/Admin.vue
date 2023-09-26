@@ -10,9 +10,9 @@
                         <li class="active"><router-link to="/dashboard/ip">IPs</router-link></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><router-link to="/logout">Logout</router-link></li>
+                        <li><router-link to="#"><span @click="logout">Logout</span></router-link></li>
                         <li>
-                            <router-link to="/logout"><span class="text-primary"><b>Logged in by : MR HASAN</b></span></router-link>
+                            <router-link to="/logout"><span class="text-primary"><b>Logged in by : {{ this.getLoggedInUserName() }} </b></span></router-link>
                         </li>
                     </ul>
                 </div>
@@ -23,15 +23,25 @@
 </template>
 
 <script>
+import AuthRepository from '../Repositories/AuthRepository';
+
 export default {
-    name: 'Dashboard',
+    name: 'AdminTemplate',
     data() {
         return {
 
         }
     },
     methods: {
-
+        logout() {
+            var token = this.$helpers.getCookie('token');
+            if (token) {
+                AuthRepository.logout(token).finally(response => {
+                    this.$helpers.deleteCookie('token');
+                    this.$router.push({ name: 'Login' });
+                });
+            }
+        }
     }
 }
 </script>

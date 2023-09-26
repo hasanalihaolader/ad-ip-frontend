@@ -15,5 +15,23 @@ export default {
         } catch (error) {
             throw error;
         }
+    },
+
+    async logout()
+    {
+        try {
+            return await api_instance.post('/api/v1/logout', []);
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async getLoggedUserProfile()
+    {
+        try {
+            return await api_instance.post('/api/v1/user-profile', []);
+        } catch (error) {
+            throw error;
+        }
     }
 };
