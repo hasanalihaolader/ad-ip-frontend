@@ -24,5 +24,19 @@ export default {
     },
     deleteCookie(cookieName) {
         document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    },
+    setValidationErrorToVeeValidator(errorResponse) {
+        if (!this.hasOwnProperty('$validator')) {
+            return;
+        }
+        this.$validator.errors.clear();
+        let errorFields = Object.keys(errorResponse);
+        errorFields.map(field => {
+            let errorString = errorResponse[field].join(', ');
+            this.$validator.errors.add({
+                field: field,
+                msg: errorString
+            });
+        });
     }
 }

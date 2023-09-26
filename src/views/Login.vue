@@ -31,7 +31,7 @@
                                 <label for="exampleInputPassword1">Password</label>
                                 <input type="password" v-validate="'required'" class="form-control" id="password"
                                     name="password" v-model="input.password" placeholder="Password">
-                                <small id="emailHelp" class="form-text text-danger" v-show="errors.has('email')">{{
+                                <small id="passwordHelp" class="form-text text-danger" v-show="errors.has('email')">{{
                                     errors.first('password') }}</small>
                             </div>
 

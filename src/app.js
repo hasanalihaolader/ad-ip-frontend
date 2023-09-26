@@ -12,13 +12,16 @@ import helperClass from './helpers/helper';
 import mixin from './helpers/mixin';
 
 Vue.prototype.$helpers = helperClass
-
+Vue.prototype.$setErrorsFromResponse = helperClass.setValidationErrorToVeeValidator
 Vue.config.productionTip = false
 
 Vue.use(VeeValidate);
 Vue.use(VueAxios, axios)
 Vue.use(Vuex)
 Vue.mixin(mixin);
+
+
+
 
 authentication(router);
 dynamicPageTitle(router);
