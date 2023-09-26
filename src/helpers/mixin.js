@@ -1,7 +1,25 @@
+import AuthRepository from "../Repositories/AuthRepository";
+
 export default {
+    data(){
+        return {
+            logged_in_user : {}
+        }
+    },
     methods: {
-        setLoggedInUser: function (user){
-            this.$store.state.logged_in_user = {'hasan':'Hasan'};
+        setLoggerInUser: function (){
+            AuthRepository.getLoggedUserProfile().then(response => {
+                this.$store.commit('setLoggedInUserInformation', response.data.data);
+            })
+        },
+
+        getLoggedInUserName: function() {
+            var logged_in_user_name = this.$store.state.logged_in_user.name;
+            if(!logged_in_user_name)
+            {
+                this.setLoggerInUser();
+            }
+            return this.$store.state.logged_in_user.name;
         }
     }
 }
