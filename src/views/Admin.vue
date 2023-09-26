@@ -12,7 +12,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><router-link to="#"><span @click="logout">Logout</span></router-link></li>
                         <li>
-                            <router-link to="/logout"><span class="text-primary"><b>Logged in by : {{ this.$store.state.logged_in_user.name }}</b></span></router-link>
+                            <router-link to="/logout"><span class="text-primary"><b>Logged in by : {{ this.getLoggedInUserName() }} </b></span></router-link>
                         </li>
                     </ul>
                 </div>
