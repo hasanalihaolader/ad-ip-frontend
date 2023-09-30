@@ -1,7 +1,7 @@
 
 <template>
     <div class="container">
-        <center><b>Welcome to Dashboard</b></center>
+        <center><b>Welcome to Awesome ip management solution </b></center>
     </div>
 </template>
 

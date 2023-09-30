@@ -4,7 +4,8 @@ export default {
     data() {
         return {
             logged_in_user: {},
-            data_list: {}
+            data_list: {},
+            is_modal_visible: false
         }
     },
     methods: {
@@ -29,8 +30,16 @@ export default {
             return [];
         },
 
-        formatErrorResponse: function(error) {
+        formatErrorResponse: function (error) {
             return error.response.data.message;
-        }
+        },
+
+        showModal() {
+            this.is_modal_visible = true;
+        },
+
+        closeModal() {
+            this.is_modal_visible = false;
+        },
     }
 }

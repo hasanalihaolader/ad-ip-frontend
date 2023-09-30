@@ -11,9 +11,9 @@ export default {
 
     async createOrUpdate(request, verb, updatable_id) {
         try {
-            if (request && updatable_id) {
-                if (verb == 'update') {
-                    return await api_instance.patch('/api/v1/ip/update/' + updatable_id, request);
+            if (request) {
+                if (verb == 'update' && updatable_id) {
+                    return await api_instance.patch('/api/v1/ip/update?id=' + updatable_id, request);
                 }
                 return await api_instance.post('/api/v1/ip/create', request);
 
@@ -27,7 +27,7 @@ export default {
     async getById(id) {
         try {
             if (id) {
-                return await api_instance.get('/api/v1/ip/' + id);
+                return await api_instance.get('/api/v1/ip?id=' + id);
             }
         } catch (error) {
             throw error;
