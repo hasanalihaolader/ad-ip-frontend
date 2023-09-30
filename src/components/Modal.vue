@@ -2,9 +2,8 @@
     <transition name="modal-fade">
         <div class="modal-backdrop">
             <div class="modal">
-                <header class="modal-header bg-primary text-center f-18 f-bold" >
+                <header class="modal-header bg-primary text-center f-18 f-bold" style="text-transform: uppercase">
                     <slot name="header">
-                        This is the default title!
                     </slot>
                     <button type="button" class="btn-close btn-primary" @click="close">
                         x
