@@ -6,18 +6,17 @@
             <div class="col-sm-12 panel-heading text-right">
                 <div>
                     <div class="col-sm-6" style="display: flex;padding-left: 0px;">
-                        <input style="width: 50%;" type="text" class="form-control"><button class="btn btn-default"><i
-                                class="fas fa-search"></i> Search</button>
+
                     </div>
                     <div class="col-sm-6" style="padding-right: 0px;">
                         <button type="button" class="btn btn-primary" @click="create">
-                            <i class="fas fa-plus"></i>  Add New IP
+                            <i class="fas fa-plus"></i> Add New IP
                         </button>
                     </div>
                 </div>
 
                 <form class="form-horizontal" @submit.prevent="createOrUpdate">
-                    <Modal v-show="is_modal_visible" @close="closeModal">
+                    <Modal v-show="this.is_modal_visible" @close="closeModal">
                         <template v-slot:header>
                             {{ verb }} NEW IP
                         </template>
@@ -95,7 +94,6 @@ export default {
     },
     data() {
         return {
-            is_modal_visible: false,
             ips: {},
             failed_message: '',
             success_message: '',
@@ -129,17 +127,19 @@ export default {
             }
             this.$validator.reset();
         },
-        showModal() {
-            this.is_modal_visible = true;
-        },
-        closeModal() {
-            this.is_modal_visible = false;
-        },
         create() {
             this.verb = 'add';
             this.resetModalValue();
             this.showModal();
         },
+
+        errorHandle() {
+            this.failed_message = 'Any system incident ongoing, please contact your tech administrator';
+            this.is_failed_messaged_show = true;
+            this.closeModal();
+            this.resetModalValue();
+        },
+
         edit(id) {
             this.verb = 'update';
             if (id) {
@@ -150,7 +150,7 @@ export default {
                     this.updatable_id = formatted_response.id
 
                 }).catch(error => {
-                    // this.$setErrorsFromResponse(error.response.data.data);
+                    this.errorHandle();
                 });
             }
         },
@@ -166,7 +166,12 @@ export default {
                             this.is_success_messaged_show = true;
                         }
                     }).catch(error => {
-                        this.$setErrorsFromResponse(error.response.data.data);
+                        if (error.response) {
+                            this.$setErrorsFromResponse(error.response.data.data);
+                        }
+                        else {
+                            this.errorHandle();
+                        }
                     });
                 }
             });
