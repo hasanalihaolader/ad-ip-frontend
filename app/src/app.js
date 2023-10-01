@@ -21,8 +21,6 @@ Vue.use(Vuex)
 Vue.mixin(mixin);
 
 
-
-
 authentication(router);
 dynamicPageTitle(router);
 new Vue({
