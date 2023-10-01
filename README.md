@@ -38,7 +38,7 @@ git clone https://github.com/hasanalihaolader/ad-ip-frontend.git
 
 ### **🌱 Application info:**
 ```env
-App_URL: https://localhost:4003/
+App_URL: http://localhost:4003/
 ```
 
 ### **🌱 Default user name password to login admin panel**
