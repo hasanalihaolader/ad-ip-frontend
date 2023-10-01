@@ -32,6 +32,7 @@ Temporary Items
 .DS_Store
 node_modules
 /dist
+/docker/logs/
 
 # local env files
 .env.local
