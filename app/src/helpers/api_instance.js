@@ -4,9 +4,8 @@ import AuthRepository from '../Repositories/AuthRepository';
 import helpers from './helper';
 import router from '../router/web';
 
-
+console.log(process.env);
 const api_instance = axios.create({
-  baseURL: process.env.VUE_APP_APIGW_BASE_URL, // Replace with your API server URL
   timeout: 1000,
 });
 
@@ -30,15 +29,14 @@ api_instance.interceptors.response.use(
   },
   async (error) => {
     if (error.response && error.response.status == 401 && router.history.current.meta.require_auth) {
-      error.config.retries = error.config.retries || 0 ;
+      error.config.retries = error.config.retries || 0;
       const maxRetries = 10;
-      if ( error.config.retries < maxRetries) {
+      if (error.config.retries < maxRetries) {
         error.config.retries++;
         try {
           const response = await AuthRepository.refreshAccessToken();
           const original_request = error.config;
-          if(response.status == 200 && response.data.status && response.data.data.access_token)
-          {
+          if (response.status == 200 && response.data.status && response.data.data.access_token) {
             let new_access_token = response.data.data.access_token;
             helpers.setCookie('token', new_access_token, 1);
             original_request.headers.Authorization = `Bearer ${new_access_token}`;
@@ -49,10 +47,9 @@ api_instance.interceptors.response.use(
         }
       }
     }
-    else if(error.response && error.response.status == 403)
-    {
+    else if (error.response && error.response.status == 403) {
       helpers.deleteCookie('token');
-      router.push({ name: 'Login'});
+      router.push({ name: 'Login' });
     }
     return Promise.reject(error);
   }

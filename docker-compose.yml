@@ -1,0 +1,32 @@
+version: "3.7"
+
+networks:
+  ad-network:
+    driver: bridge
+  ad-common-network:
+    external: true
+
+volumes:
+  dbdata:
+    driver: local
+
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+      args:
+      - APIGW_BASE_URL=${APIGW_BASE_URL}
+    container_name: ad_frontend
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./app:/var/www
+      - ./docker/logs/nginx/:/var/log/nginx/
+    tty: true
+    ports:
+      - ${APP_BASE_HTTPS_PORT}:80
+    networks:
+      - ad-network
+      - ad-common-network
